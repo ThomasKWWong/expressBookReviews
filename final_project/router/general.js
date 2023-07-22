@@ -12,33 +12,49 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-  let book = JSON.stringify(books)
-  let length = Object.keys(books).length;
-  console.log(length)
-  let titles = []
-  for (let i = 1; i <= length; i++){
-    titles.push(books[i].title)
-  }
-  //console.log(JSON.stringify(titles))
-  return res.send(titles);
+  book_list = JSON.stringify(books)
+  return res.send(book_list);
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbn = req.params.isbn;
+  return res.send(books[isbn]);
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const author = req.params.author;
+  filtered_books = [];
+  let length = Object.keys(books).length;
+  for (let i = 1; i <= length; i++) {
+    if(books[i].author === author){
+        let add_book = new Object();
+        add_book["isbn"] = i
+        add_book["title"] = books[i].title
+        add_book["reviews"] = books[i].reviews
+        filtered_books.push(add_book);
+    }
+  }
+  return res.send(filtered_books);
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const title = req.params.title;
+  filtered_books = [];
+  let length = Object.keys(books).length;
+  for (let i = 1; i <= length; i++) {
+    if(books[i].title === title){
+        //create json object that includes isbn data, and excludes title
+        let add_book = new Object();
+        add_book["isbn"] = i
+        add_book["author"] = books[i].author
+        add_book["reviews"] = books[i].reviews
+        filtered_books.push(add_book);
+    }
+  }
+  return res.send(filtered_books);
 });
 
 //  Get book review
