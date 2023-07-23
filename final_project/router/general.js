@@ -6,8 +6,18 @@ const public_users = express.Router();
 
 
 public_users.post("/register", (req,res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let username = req.body.username;
+  let password = req.body.password;
+  users.forEach(user => {
+      if (user.username === username){
+         return res.status(409).json({message: "Username is taken"});
+      }
+  })
+  let add_user = new Object();
+  add_user["username"] = username;
+  add_user["password"] = password;
+  users.push(add_user);
+  return res.status(201).json({message: "Customer successfully registered. Now you can login"});
 });
 
 // Get the book list available in the shop
@@ -25,7 +35,7 @@ public_users.get('/isbn/:isbn',function (req, res) {
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   const author = req.params.author;
-  filtered_books = [];
+  let filtered_books = [];
   let length = Object.keys(books).length;
   for (let i = 1; i <= length; i++) {
     if(books[i].author === author){
@@ -42,7 +52,7 @@ public_users.get('/author/:author',function (req, res) {
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   const title = req.params.title;
-  filtered_books = [];
+  let filtered_books = [];
   let length = Object.keys(books).length;
   for (let i = 1; i <= length; i++) {
     if(books[i].title === title){
@@ -59,8 +69,18 @@ public_users.get('/title/:title',function (req, res) {
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let isbn = req.params.isbn;
+  let filtered_reviews = [];
+  let length = Object.keys(books).length;
+  for (let i = 1; i <= length; i++) {
+    if(books[i].isbn === isbn){
+        //create json object that includes isbn data, and excludes title
+        let add_book = new Object();
+        add_book["reviews"] = books[i].reviews
+        filtered_reviews.push(add_book);
+    }
+  }
+  return res.send(filtered_reviews);
 });
 
 module.exports.general = public_users;
