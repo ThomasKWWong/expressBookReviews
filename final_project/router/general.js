@@ -3,6 +3,7 @@ let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
+let book_list = require("./auth_users").bookList;
 
 
 public_users.post("/register", (req,res) => {
@@ -22,8 +23,8 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-  book_list = JSON.stringify(books)
-  return res.send(book_list);
+  string_book_list = JSON.stringify(book_list)
+  return res.send(string_book_list);
 });
 
 // Get book details based on ISBN
@@ -70,17 +71,8 @@ public_users.get('/title/:title',function (req, res) {
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   let isbn = req.params.isbn;
-  let filtered_reviews = [];
-  let length = Object.keys(books).length;
-  for (let i = 1; i <= length; i++) {
-    if(books[i].isbn === isbn){
-        //create json object that includes isbn data, and excludes title
-        let add_book = new Object();
-        add_book["reviews"] = books[i].reviews
-        filtered_reviews.push(add_book);
-    }
-  }
-  return res.send(filtered_reviews);
+  return res.send(book_list[isbn].reviews);
 });
 
 module.exports.general = public_users;
+
