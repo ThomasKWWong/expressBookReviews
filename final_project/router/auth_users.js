@@ -7,11 +7,11 @@ let book_list = JSON.parse(JSON.stringify(books));
 let users = [];
 
 const isValid = (username)=>{ //returns boolean
-//write code to check is the username is valid
+//write code to check is the username is valid (not used)
 }
 
 const authenticatedUser = (username,password)=>{ //returns boolean
-//write code to check if username and password match the one we have in records.
+//write code to check if username and password match the one we have in records. (not used)
 }
 
 //only registered users can login
